@@ -1,4 +1,5 @@
 // An example of recording audio onto a MicroSD card, using an INMP441 microphone and a XIAO ESP32-C3
+// This is an adaption of this project: https://github.com/0015/ThatProject/tree/master/ESP32_MICROPHONE/ESP32_INMP441_RECORDING
 //
 // Since the values for i2s.dma_buf_count and i2s.dma_buf_len can be somewhat of a mystery, in this
 // example they are calculated automatically to use the least amount of DMA memory given your preference for 
@@ -9,6 +10,7 @@
 //
 // For example, this code includes test calculations in a fixed for-loop. With a very low latency setup, the
 // loop takes 12225 ms to complete, compared to ony 12027 ms on a high latency setup. A very measurable difference.
+// Doing the same processing without audio processing in parrallel, takes only 11242 ms
 //
 // See this excellent video: https://youtu.be/ejyt-kWmys8?si=oVVuLGKX63CKpm2t
 //
@@ -105,7 +107,7 @@ void setup()
   // Test to see just how much CPU work can get interfered with when the DMA interrupts the CPU
   unsigned long startTime = millis();
   SomeCalculationsToKeepTheCPUBusy();
-  Serial.printf("CPU work done. Took %d ms to complete\n", millis() - startTime);
+  Serial.printf("CPU work on main thread done. With audio processing done in parrallel, it took %d ms to complete\n", millis() - startTime);
 }
 
 void loop()
